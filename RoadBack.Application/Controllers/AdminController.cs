@@ -14,6 +14,18 @@ namespace Denunciation.Application.Controllers
             return View();
         }
 
+        [Authorize(Policy = "Administrator")]
+        public IActionResult Administrator()
+        {
+            return View();
+        }
+
+        [Authorize(Policy = "Manager")]
+        public IActionResult Manager()
+        {
+            return View();
+        }
+
         [AllowAnonymous]
         public IActionResult Login(string returnUrl)
         {
@@ -31,7 +43,9 @@ namespace Denunciation.Application.Controllers
 
             var claims = new List<Claim>()
             {
-                new Claim("Demo","Value")
+                new Claim(ClaimTypes.Name, model.UserName),
+                new Claim(ClaimTypes.Role, "Administrator"),
+                new Claim(ClaimTypes.Role, "Manager")
             };
 
             var claimIdentity = new ClaimsIdentity(claims,"Cookie");
