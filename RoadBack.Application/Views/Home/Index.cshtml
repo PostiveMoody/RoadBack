@@ -1,15 +1,6 @@
 ﻿<h1>Home</h1>
 
-<a asp-controller="Admin" asp-action="Index">Admin</a>
-<a asp-controller="Admin" asp-action="Administrator">Administrator</a>
-<a asp-controller="Admin" asp-action="Manager">Manager</a>
-
-<p>
-    Name = @ViewBag.Name
-</p>
-
-<p>
-    IsAuthenticated = @ViewBag.IsAuthenticated
-</p>
+<partial name="_Menu" />
+<partial name="_UserInfo" />
 
 

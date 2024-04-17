@@ -20,6 +20,11 @@ namespace Denunciation.Application.Controllers
             return View();
         }
 
+        public IActionResult SecuredZone()
+        {
+            return View();
+        }
+
         public IActionResult AccessDenied()
         {
             return View();

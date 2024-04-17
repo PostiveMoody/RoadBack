@@ -1,7 +1,10 @@
 ﻿using Denunciation.Application.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using RoadBack.DAL;
 using System.Security.Claims;
 
 namespace Denunciation.Application.Controllers
@@ -9,6 +12,17 @@ namespace Denunciation.Application.Controllers
     [Authorize]
     public class AdminController : Controller
     {
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+
+        public AdminController(
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager)
+        {
+            this._userManager = userManager;
+            this._signInManager = signInManager;
+        }
+
         public IActionResult Index()
         {
             return View();
@@ -27,37 +41,41 @@ namespace Denunciation.Application.Controllers
         }
 
         [AllowAnonymous]
-        public IActionResult Login(string returnUrl)
+        public IActionResult LogIn(string returnUrl)
         {
             return View();
         }
 
         [HttpPost]
         [AllowAnonymous]
-        public IActionResult Login(LoginViewModel model)
+        public async Task<IActionResult> LogIn(LoginViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
-            var claims = new List<Claim>()
+            var user = await _userManager.FindByNameAsync(model.UserName);
+
+            if(user == null)
             {
-                new Claim(ClaimTypes.Name, model.UserName),
-                new Claim(ClaimTypes.Role, "Administrator"),
-                new Claim(ClaimTypes.Role, "Manager")
-            };
+                ModelState.AddModelError("", "User not found");
+                return View(model);
+            }
 
-            var claimIdentity = new ClaimsIdentity(claims,"Cookie");
-            var claimPrincipal = new ClaimsPrincipal(claimIdentity);
-            HttpContext.SignInAsync("Cookie", claimPrincipal);
+            var result = await _signInManager.PasswordSignInAsync(user, model.Password, false,false);
 
-            return Redirect(model.ReturnUrl);
+            if(result.Succeeded)
+            {
+                return Redirect(model.ReturnUrl);
+            }
+
+            return View(model);
         }
 
-        public IActionResult LogOut()
+        public async Task<IActionResult> LogOut()
         {
-            HttpContext.SignOutAsync("Cookie");
+            await _signInManager.SignOutAsync();
             return Redirect("/Home/Index");
         }
     }
