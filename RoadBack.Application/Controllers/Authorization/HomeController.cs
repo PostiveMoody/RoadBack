@@ -2,7 +2,7 @@ using Denunciation.Application.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
-namespace Denunciation.Application.Controllers
+namespace RoadBack.Application.Controllers.Authorization
 {
     public class HomeController : Controller
     {

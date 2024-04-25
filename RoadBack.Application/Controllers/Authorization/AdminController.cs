@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using RoadBack.DAL;
 using System.Security.Claims;
 
-namespace Denunciation.Application.Controllers
+namespace RoadBack.Application.Controllers.Authorization
 {
     [Authorize]
     public class AdminController : Controller
@@ -19,8 +19,8 @@ namespace Denunciation.Application.Controllers
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager)
         {
-            this._userManager = userManager;
-            this._signInManager = signInManager;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         public IActionResult Index()
@@ -57,15 +57,15 @@ namespace Denunciation.Application.Controllers
 
             var user = await _userManager.FindByNameAsync(model.UserName);
 
-            if(user == null)
+            if (user == null)
             {
                 ModelState.AddModelError("", "User not found");
                 return View(model);
             }
 
-            var result = await _signInManager.PasswordSignInAsync(user, model.Password, false,false);
+            var result = await _signInManager.PasswordSignInAsync(user, model.Password, false, false);
 
-            if(result.Succeeded)
+            if (result.Succeeded)
             {
                 return Redirect(model.ReturnUrl);
             }

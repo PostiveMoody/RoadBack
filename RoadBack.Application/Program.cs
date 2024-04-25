@@ -1,6 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using RoadBack.DAL;
+using RoadBack.DAL.Services.Interfaces;
+using RoadBack.DAL.Services;
 using System.Security.Claims;
+using RoadBack.Application.Automapper;
 
 namespace Denunciation.Application
 {
@@ -9,6 +12,19 @@ namespace Denunciation.Application
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+
+            builder.Services.AddSwaggerGen();
+
+            builder.Services.AddDbContext<ExpenseTrackerDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            builder.Services.AddTransient<ExpenseTrackerDbContext, ExpenseTrackerDbContext>();
+            builder.Services.AddAutoMapper(typeof(DtoBlMappingProfile));
+            builder.Services.AddScoped<ICategoryService, CategoryService>();
+            builder.Services.AddScoped<IAccountService, AccountService>();
+            builder.Services.AddScoped<IExpenseService, ExpenseService>();
+            //builder.Services.AddControllers();
+
 
             builder.Services.AddDbContext<ApplicationDbContext>(config =>
             {
@@ -63,6 +79,9 @@ namespace Denunciation.Application
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            app.UseSwagger();
+            app.UseSwaggerUI();
 
             app.UseRouting();
 
