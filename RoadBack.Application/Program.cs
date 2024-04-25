@@ -1,11 +1,10 @@
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using RoadBack.DAL;
 using System.Security.Claims;
 
 namespace Denunciation.Application
 {
-    public class Program
+    public partial class Program
     {
         public static void Main(string[] args)
         {
@@ -23,13 +22,6 @@ namespace Denunciation.Application
                 config.Password.RequiredLength = 6;
             })
               .AddEntityFrameworkStores<ApplicationDbContext>();
-
-            //builder.Services.AddAuthentication("Cookie")
-            //    .AddCookie("Cookie", config =>
-            //    {
-            //        config.LoginPath = "/Admin/Login";
-            //        config.AccessDeniedPath = "/Home/AccessDenied";
-            //    });
 
             builder.Services.ConfigureApplicationCookie(config =>
             {
@@ -66,7 +58,6 @@ namespace Denunciation.Application
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
@@ -84,28 +75,6 @@ namespace Denunciation.Application
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
             app.Run();
-        }
-
-        public static class DatabaseInitializer
-        {
-            public static void Init(IServiceProvider scopeServiceProvider)
-            {
-                var userManager = scopeServiceProvider.GetService<UserManager<ApplicationUser>>();
-
-                var user = new ApplicationUser()
-                {
-                    UserName = "User",
-                    LastName = "LastName",
-                    FirstName = "FirstName"
-                };
-
-                var result = userManager.CreateAsync(user, "123qwe").GetAwaiter().GetResult();
-
-                if (result.Succeeded)
-                {
-                    userManager.AddClaimAsync(user, new Claim(ClaimTypes.Role, "Administrator")).GetAwaiter().GetResult();
-                }
-            }
         }
     }
 }
