@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Denunciation.Application.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using RoadBack.DAL.Services.Interfaces;
@@ -22,20 +23,20 @@ namespace RoadBack.Application.Controllers
         [Route("[action]")]
         public async Task<IActionResult> Expense()
         {
-            var result = await _expenseService.GetExpensesAsync(1, true);
+            var result = await _expenseService.GetExpensesAsync(10, true);
             if(result == null)
             {
                 return View();
             }
 
-            var expense = result.Data.SingleOrDefault();
+            var expense = result.Data;
             if(expense == null)
             {
                 ViewBag.Message = "В этом месяце еще не было трат";
                 return View();
             }
 
-            ViewBag.Message = expense.Payment.ToString();
+            ViewBag.Message = expense.Sum(expense => expense.Payment).ToString();
             return View();
         }
 
@@ -48,8 +49,17 @@ namespace RoadBack.Application.Controllers
                 return View(model);
             }
 
-            var result = await _expenseService.CreateExpenseAsync(_mapper.Map<Domain.Models.Expense>(model));
-            
+            var expense = new Domain.Models.Expense()
+            {
+                Id = model.Id,
+                CreatedAt = model.CreatedAt,
+                Payment = model.Payment,
+                Comment = model.Comment
+            };
+
+            var result = await _expenseService.CreateExpenseAsync(expense);
+
+            ViewBag.Message = $"Была добавлена трата: {result.Data.Id}, суммой: {result.Data.Payment}, с комментарием: {result.Data.Comment}";
             return View(model);
         }
 

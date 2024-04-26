@@ -67,10 +67,10 @@ namespace RoadBack.DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("AccountId")
+                    b.Property<Guid?>("AccountId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CategoryId")
+                    b.Property<Guid?>("CategoryId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Comment")
@@ -96,9 +96,7 @@ namespace RoadBack.DAL.Migrations
                 {
                     b.HasOne("RoadBack.Domain.Models.Account", null)
                         .WithMany("Expenses")
-                        .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AccountId");
                 });
 
             modelBuilder.Entity("RoadBack.Domain.Models.Account", b =>

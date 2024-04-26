@@ -46,8 +46,8 @@ namespace RoadBack.DAL.Migrations
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Payment = table.Column<double>(type: "float", nullable: false),
                     Comment = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    AccountId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    AccountId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: true)
                 },
                 constraints: table =>
@@ -57,8 +57,7 @@ namespace RoadBack.DAL.Migrations
                         name: "FK_Expenses_Accounts_AccountId",
                         column: x => x.AccountId,
                         principalTable: "Accounts",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(

@@ -12,7 +12,7 @@ using RoadBack.DAL;
 namespace RoadBack.DAL.Migrations
 {
     [DbContext(typeof(ExpenseTrackerDbContext))]
-    [Migration("20240426034224_InitialCreate")]
+    [Migration("20240426102523_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -70,10 +70,10 @@ namespace RoadBack.DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("AccountId")
+                    b.Property<Guid?>("AccountId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CategoryId")
+                    b.Property<Guid?>("CategoryId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Comment")
@@ -99,9 +99,7 @@ namespace RoadBack.DAL.Migrations
                 {
                     b.HasOne("RoadBack.Domain.Models.Account", null)
                         .WithMany("Expenses")
-                        .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AccountId");
                 });
 
             modelBuilder.Entity("RoadBack.Domain.Models.Account", b =>
