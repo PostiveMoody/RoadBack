@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
+using Denunciation.Application.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using RoadBack.DAL.Services.Interfaces;
 
 namespace RoadBack.Application.Controllers
 {
+    [Route("[controller]")]
     public class ExpenseController : Controller
     {
         private readonly IExpenseService _expenseService;
@@ -13,6 +16,41 @@ namespace RoadBack.Application.Controllers
         {
             _expenseService = expenseService;
             _mapper = mapper;
+        }
+
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> Expense()
+        {
+            var result = await _expenseService.GetExpensesAsync(1, true);
+            if(result == null)
+            {
+                return View();
+            }
+
+            var expense = result.Data.SingleOrDefault();
+            if(expense == null)
+            {
+                ViewBag.Message = "В этом месяце еще не было трат";
+                return View();
+            }
+
+            ViewBag.Message = expense.Payment.ToString();
+            return View();
+        }
+
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> Expense(DTO.Expense model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var result = await _expenseService.CreateExpenseAsync(_mapper.Map<Domain.Models.Expense>(model));
+            
+            return View(model);
         }
 
         [HttpPost]

@@ -4,6 +4,7 @@ using RoadBack.DAL.Services.Interfaces;
 
 namespace RoadBack.Application.Controllers
 {
+    [Route("[controller]")]
     public class CategoryController : Controller
     {
         private readonly ICategoryService _categoryService;

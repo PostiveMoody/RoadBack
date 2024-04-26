@@ -52,7 +52,7 @@ namespace RoadBack.DAL.Services
             return ServiceResponse.Succeeded();
         }
 
-        public async Task<ServiceDataResponse<IEnumerable<Category>>> GetCategoriesAsync(int quatity)
+        public async Task<ServiceDataResponse<IEnumerable<Category>>> GetCategoriesAsync(int quatity = 1, bool takeLast = false)
         {
             var categories = await _dbContext.Categories.Take(quatity).ToListAsync();
             if (categories == null)

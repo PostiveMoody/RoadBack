@@ -1,9 +1,8 @@
-using Denunciation.Application.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 
 namespace RoadBack.Application.Controllers.Authorization
 {
+    [Route("[controller]")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -13,6 +12,8 @@ namespace RoadBack.Application.Controllers.Authorization
             _logger = logger;
         }
 
+        [HttpGet]
+        [Route("[action]")]
         public IActionResult Index()
         {
             ViewBag.Name = User.Identity.Name;
@@ -20,11 +21,15 @@ namespace RoadBack.Application.Controllers.Authorization
             return View();
         }
 
+        [HttpGet]
+        [Route("[action]")]
         public IActionResult SecuredZone()
         {
             return View();
         }
 
+        [HttpGet]
+        [Route("[action]")]
         public IActionResult AccessDenied()
         {
             return View();

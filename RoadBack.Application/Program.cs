@@ -13,11 +13,8 @@ namespace Denunciation.Application
         {
             var builder = WebApplication.CreateBuilder(args);
 
-
             builder.Services.AddSwaggerGen();
 
-            builder.Services.AddDbContext<ExpenseTrackerDbContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             builder.Services.AddTransient<ExpenseTrackerDbContext, ExpenseTrackerDbContext>();
             builder.Services.AddAutoMapper(typeof(DtoBlMappingProfile));
             builder.Services.AddScoped<ICategoryService, CategoryService>();
@@ -89,9 +86,10 @@ namespace Denunciation.Application
 
             app.UseAuthorization();
 
-            app.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
 
             app.Run();
         }

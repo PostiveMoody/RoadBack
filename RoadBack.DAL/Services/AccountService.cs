@@ -63,7 +63,7 @@ namespace RoadBack.DAL.Services
             return ServiceDataResponse<Account>.Succeeded(account);
         }
 
-        public async Task<ServiceDataResponse<IEnumerable<Account>>> GetAccountsAsync(int quatity)
+        public async Task<ServiceDataResponse<IEnumerable<Account>>> GetAccountsAsync(int quatity = 1, bool takeLast = false)
         {
             var accounts = await _dbContext.Accounts.Take(quatity).ToListAsync();
 

@@ -1,4 +1,16 @@
 ﻿<h1>Manager</h1>
 
+<form asp-controller="Expense" asp-action="Expense" method="get">
+    <div asp-validation-summary="All"></div>
+
+    <div>
+        <label>Получить итого по тратам - за последний месяц:</label>
+    </div>
+
+    <p>
+        <button type="submit">Траты</button>
+    </p>
+</form>
+
 <partial name="_Menu" />
 <partial name="_UserInfo" />

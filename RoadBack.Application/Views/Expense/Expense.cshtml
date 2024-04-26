@@ -1,0 +1,35 @@
+﻿@model RoadBack.Application.DTO.Expense
+@{
+    ViewBag.Title = "Expense";
+    ViewBag.Localization = "Траты:";
+}
+<h1>@ViewBag.Title</h1>
+<h2>@ViewBag.Localization</h2>
+<h3>@ViewBag.Message</h3>
+
+<partial name="_Menu" />
+
+<form asp-controller="Expense" asp-action="Expense" method="post">
+    <div asp-validation-summary="All"></div>
+
+    <div>
+        <label>Комментарий</label>
+        <input asp-for="Comment" />
+        <span asp-validation-for="Comment"></span>
+    </div>
+    <div>
+        <label>Создан</label>
+        <input asp-for="CreatedAt" />
+        <span asp-validation-for="CreatedAt"></span>
+    </div>
+    <div>
+        <label>Платеж</label>
+        <input asp-for="Payment" />
+        <span asp-validation-for="Payment"></span>
+    </div>
+
+
+    <p>
+        <button type="submit">Сохранить</button>
+    </p>
+</form>

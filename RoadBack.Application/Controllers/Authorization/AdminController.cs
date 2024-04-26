@@ -1,15 +1,13 @@
 ﻿using Denunciation.Application.Models;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using RoadBack.DAL;
-using System.Security.Claims;
 
 namespace RoadBack.Application.Controllers.Authorization
 {
     [Authorize]
+    [Route("[controller]")]
     public class AdminController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -23,31 +21,41 @@ namespace RoadBack.Application.Controllers.Authorization
             _signInManager = signInManager;
         }
 
+        [HttpGet]
+        [Route("[action]")]
         public IActionResult Index()
         {
             return View();
         }
 
         [Authorize(Policy = "Administrator")]
+        [HttpGet]
+        [Route("[action]")]
         public IActionResult Administrator()
         {
             return View();
         }
 
         [Authorize(Policy = "Manager")]
+        [HttpGet]
+        [Route("[action]")]
         public IActionResult Manager()
         {
             return View();
         }
 
         [AllowAnonymous]
+        [HttpGet]
+        [Route("[action]")]
         public IActionResult LogIn(string returnUrl)
         {
             return View();
         }
 
-        [HttpPost]
+        
         [AllowAnonymous]
+        [HttpPost]
+        [Route("[action]")]
         public async Task<IActionResult> LogIn(LoginViewModel model)
         {
             if (!ModelState.IsValid)
@@ -73,6 +81,8 @@ namespace RoadBack.Application.Controllers.Authorization
             return View(model);
         }
 
+        [HttpGet]
+        [Route("[action]")]
         public async Task<IActionResult> LogOut()
         {
             await _signInManager.SignOutAsync();

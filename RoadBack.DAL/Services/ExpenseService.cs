@@ -64,9 +64,14 @@ namespace RoadBack.DAL.Services
             return ServiceDataResponse<Expense>.Succeeded(expense);
         }
 
-        public async Task<ServiceDataResponse<IEnumerable<Expense>>> GetExpensesAsync(int quatity)
+        public async Task<ServiceDataResponse<IEnumerable<Expense>>> GetExpensesAsync(int quatity = 1, bool takeLast = false)
         {
             var expenses = await _dbContext.Expenses.Take(quatity).ToListAsync();
+
+            if (takeLast)
+            {
+                expenses =  await _dbContext.Expenses.OrderByDescending(it => it.Id).Take(quatity).ToListAsync();
+            }
 
             if (expenses == null)
             {
